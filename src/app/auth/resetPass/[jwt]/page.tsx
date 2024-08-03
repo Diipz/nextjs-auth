@@ -7,12 +7,12 @@ interface Props {
     }
 }
 
-export default function ResetPasswordPage({params}: Props) {
+export default function ResetPasswordPage({ params }: Props) {
 
     const payload = verifyJwt(params.jwt);
 
-    if(!payload) return <div className="flex items-center justify-center h-screen text-red-500 text-2xl">
-        The URL is not valid!
+    if (!payload) return <div className="flex items-center justify-center h-screen text-red-500 text-2xl">
+        Your reset password link has expired!
     </div>
 
     return (

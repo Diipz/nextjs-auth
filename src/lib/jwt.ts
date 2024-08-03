@@ -5,12 +5,22 @@ interface SignOption {
 }
 
 const DEFAULT_SIGN_OPTION: SignOption = {
-    expiresIn: "1d"
+    expiresIn: "30m"
+}
+
+const DEFAULT_RESET_PASS_OPTION: SignOption = {
+    expiresIn: "10m"
 }
 
 export function signJwt(payload: JwtPayload, option: SignOption = DEFAULT_SIGN_OPTION) {
     const secretKey = process.env.JWT_USER_ID_SECRET!;
-    const token = jwt.sign(payload, secretKey);
+    const token = jwt.sign(payload, secretKey, option);
+    return token;
+}
+
+export function signJwtResetPass(payload: JwtPayload, option: SignOption = DEFAULT_RESET_PASS_OPTION) {
+    const secretKey = process.env.JWT_USER_ID_SECRET!;
+    const token = jwt.sign(payload, secretKey, option);
     return token;
 }
 

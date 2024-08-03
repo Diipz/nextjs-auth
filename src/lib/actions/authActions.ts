@@ -4,7 +4,7 @@ import { User } from "@prisma/client";
 import prisma from "../prisma";
 import * as bcrypt from "bcrypt";
 import { compileActivationTemplate, compileResetPassTemplate, sendMail } from "../mail";
-import { signJwt, verifyJwt } from "../jwt";
+import { signJwt, signJwtResetPass, verifyJwt } from "../jwt";
 
 export async function registerUser(
     user: Omit<User, "id" | "emailVerified" | "image">
@@ -64,7 +64,7 @@ export async function forgotPassword(email: string){
     if(!user) throw new Error("The user does not exist!");
 
     //Send email with passowrd reset link
-    const jwtUserId = signJwt({ 
+    const jwtUserId = signJwtResetPass({ 
         id: user.id 
     });
 
