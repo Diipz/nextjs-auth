@@ -41,16 +41,17 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  firstName     String
-  lastName      String
-  password      String
-  email         String    @unique
-  emailVerified DateTime? @map("email_verified")
-  phone         String
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id                 String    @id @default(cuid())
+  firstName          String
+  lastName           String
+  password           String
+  email              String    @unique
+  emailVerified      DateTime? @map("email_verified")
+  phone              String
+  image              String?
+  stripe_customer_id String?
+  accounts           Account[]
+  sessions           Session[]
 
   @@map("users")
 }
