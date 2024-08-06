@@ -5,16 +5,13 @@ interface SignOption {
 }
 
 const DEFAULT_SIGN_OPTION: SignOption = {
-    expiresIn: "30m"
+    expiresIn: "5m"
 }
 
 const DEFAULT_RESET_PASS_OPTION: SignOption = {
     expiresIn: "10m"
 }
 
-const DEFAULT_RESET_PASS_OPTION: SignOption = {
-    expiresIn: "10m"
-}
 
 export function signJwt(payload: JwtPayload, option: SignOption = DEFAULT_SIGN_OPTION) {
     const secretKey = process.env.JWT_USER_ID_SECRET!;

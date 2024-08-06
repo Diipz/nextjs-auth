@@ -11,8 +11,6 @@ export default async function Home() {
     subject:"test", 
     body:"hello world"
   }); */
-<<<<<<< HEAD
-=======
   const session = await getServerSession(authOptions);
 
   //if user logged in display Link button to go to dashboard
@@ -22,7 +20,6 @@ export default async function Home() {
     </main>
   )
 
->>>>>>> stripe
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">

@@ -7,25 +7,18 @@ import { useRouter, usePathname } from "next/navigation";
 
 export default function SignInButton() {
     //useSession for client components or getServerSession for server components
-<<<<<<< HEAD
-    const { data: session } = useSession();
-=======
     const { data: session, status } = useSession();
->>>>>>> stripe
 
     const router = useRouter();
     const pathname = usePathname();
 
     const activationPage = pathname.includes("/auth/activation");
-<<<<<<< HEAD
-=======
 
 
     //***TODO design loader
     if (status === "loading") {
         return <p>Loading...</p>;
     }
->>>>>>> stripe
 
     return (
         <div className="flex items-center gap-2">
