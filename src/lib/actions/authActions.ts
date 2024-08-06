@@ -5,6 +5,7 @@ import prisma from "../prisma";
 import * as bcrypt from "bcrypt";
 import { compileActivationTemplate, compileResetPassTemplate, sendMail } from "../mail";
 import { signJwt, signJwtResetPass, verifyJwt } from "../jwt";
+import { setTimeout } from 'timers';
 
 export async function registerUser(
     user: Omit<User, "id" | "emailVerified" | "image" | "stripe_customer_id">
@@ -25,14 +26,36 @@ export async function registerUser(
         to: user.email,
         subject: "Activate your account",
         body
-    }); 
+    });
+    
+    //delete user after 10 minutes if not activated
+    setTimeout(async () => {
+        const userCheck = await prisma.user.findUnique({
+        where: {
+                id: result.id
+            }
+        });
+        if (!userCheck?.emailVerified) {
+            await prisma.user.delete({
+                where: {
+                    id: result.id
+                }
+            });
+        }
+    }, 10 * 60 * 1000);
+
+
     return result;
 }
 
-type ActivateUserFunc = (jswtUserId: string) => Promise<"userNotExist" | "alreadyActivated" | "success">;
+type ActivateUserFunc = (jswtUserId: string) => Promise<"userNotExist" | "alreadyActivated" | "success" | "linkExpired" >;
 
 export const activateUser: ActivateUserFunc = async (jwtUserId) => {
     const payload = verifyJwt(jwtUserId);
+
+    //expired activation link
+    if(!payload) return "linkExpired";
+
     const userId = payload?.id;
     const user = await prisma.user.findUnique({
         where: {

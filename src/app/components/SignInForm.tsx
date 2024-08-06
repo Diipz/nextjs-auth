@@ -11,7 +11,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { z } from "zod";
 
-interface Props{
+interface Props {
     callbackUrl?: string;
 }
 
@@ -32,11 +32,11 @@ export default function SignInForm(props: Props) {
 
     const [visiblePass, setVisiblePass] = useState(false);
 
-    const { 
-        register, 
-        handleSubmit, 
+    const {
+        register,
+        handleSubmit,
         //extract "errors" & "isSubmitting" from formState (from react-form-hook)
-        formState:{ errors, isSubmitting } 
+        formState: { errors, isSubmitting }
     } = useForm<InputType>({
         resolver: zodResolver(FormSchema)
     })
@@ -56,7 +56,7 @@ export default function SignInForm(props: Props) {
         }
 
         toast.success("Sign in successful");
-        router.push(props.callbackUrl ? props.callbackUrl : "/");
+        router.push("/");
     }
 
     return (
@@ -66,36 +66,36 @@ export default function SignInForm(props: Props) {
                 Sign In Form
             </div>
             <div className="p-2 flex flex-col gap-2">
-                <Input 
+                <Input
                     {...register("email")}
-                    label="Email" 
+                    label="Email"
                     errorMessage={errors.email?.message}
                     isInvalid={!!errors.email}
                 />
-                <Input 
+                <Input
                     {...register("password")}
                     label="Password"
                     type={visiblePass ? "text" : "password"}
                     errorMessage={errors.password?.message}
                     endContent={
-                        <button 
-                            type="button" 
+                        <button
+                            type="button"
                             onClick={() => setVisiblePass((prev) => !prev)}>
-                                {visiblePass ? (
-                                    <EyeSlashIcon className="w-4" />
-                                ) : (
-                                    <EyeIcon className="w-4" /> 
-                                )}    
+                            {visiblePass ? (
+                                <EyeSlashIcon className="w-4" />
+                            ) : (
+                                <EyeIcon className="w-4" />
+                            )}
                         </button>
                     }
                 />
                 <div className="flex items-center justify-center gap-2">
-                    <Button 
-                        color="primary" 
-                        type="submit" 
-                        disabled={isSubmitting} 
+                    <Button
+                        color="primary"
+                        type="submit"
+                        disabled={isSubmitting}
                         isLoading={isSubmitting}>
-                            {isSubmitting ? "Signing in..." : "Sign In"}
+                        {isSubmitting ? "Signing in..." : "Sign In"}
                     </Button>
                     <Button as={Link} href="/auth/signup">Sign Up</Button>
                 </div>

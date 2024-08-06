@@ -12,6 +12,7 @@ import { passwordStrength } from "check-password-strength";
 import PasswordStrength from "./PasswordStrength";
 import { registerUser } from "@/lib/actions/authActions";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 
 const FormSchema = z.object({
@@ -56,6 +57,8 @@ type InputType = z.infer<typeof FormSchema>
 
 export default function SignUpForm() {
 
+    const router = useRouter();
+
     //integrate React-hook-form with SignUpForm
     const {
         register,
@@ -84,6 +87,8 @@ export default function SignUpForm() {
         try {
             const result = await registerUser(user);
             toast.success("An activation link has been sent to your email");
+            router.push("/auth/signin");
+
         } catch (error) {
             toast.error("Something Went Wrong");
             console.error(error);

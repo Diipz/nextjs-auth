@@ -3,16 +3,10 @@
 import { Button } from "@nextui-org/react";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
 
 export default function SignInButton() {
     //useSession for client components or getServerSession for server components
     const { data: session, status } = useSession();
-
-    const router = useRouter();
-    const pathname = usePathname();
-
-    const activationPage = pathname.includes("/auth/activation");
 
 
     //***TODO design loader
@@ -36,15 +30,7 @@ export default function SignInButton() {
                 </>
             ) : (
                 <>
-                    <Button
-                        onClick={() => {
-                            if (activationPage) {
-                                router.push("/auth/signin");
-                            } else {
-                                signIn();
-                            }
-                        }}
-                    >
+                    <Button onClick={() => signIn()}>
                         Sign In
                     </Button>
                     <Button as={Link} href={"/auth/signup"}>

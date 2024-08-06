@@ -4,10 +4,12 @@ interface SignOption {
     expiresIn: string | number;
 }
 
+//set login link expiry
 const DEFAULT_SIGN_OPTION: SignOption = {
-    expiresIn: "5m"
+    expiresIn: "10m"
 }
 
+//set reset password link expiry
 const DEFAULT_RESET_PASS_OPTION: SignOption = {
     expiresIn: "10m"
 }
