@@ -43,11 +43,11 @@ const FormSchema = z.object({
     accepted: z.literal(true, {
         errorMap: () => ({
             message: "Please accept all terms"
-        })    
+        })
     })
-//takes whole object (data) amd compares password and confirm password fields
-//refine() returns true/false depending if pattern satisfied    
-}).refine((data) => data.password===data.confirmPassword, {
+    //takes whole object (data) amd compares password and confirm password fields
+    //refine() returns true/false depending if pattern satisfied    
+}).refine((data) => data.password === data.confirmPassword, {
     message: "Password and confirm password do not match",
     path: ["confirmPassword"],
 })
@@ -57,114 +57,114 @@ type InputType = z.infer<typeof FormSchema>
 export default function SignUpForm() {
 
     //integrate React-hook-form with SignUpForm
-    const { 
-        register, 
-        handleSubmit, 
-        reset, 
+    const {
+        register,
+        handleSubmit,
+        reset,
         control,
-        watch, 
-        formState:{errors} 
+        watch,
+        formState: { errors }
     } = useForm<InputType>({
-            resolver: zodResolver(FormSchema)
-        });
+        resolver: zodResolver(FormSchema)
+    });
 
-    const [passStrength, setPassStrength] = useState(0);    
+    const [passStrength, setPassStrength] = useState(0);
     const [isVisiblePass, setIsVisiblePass] = useState(false);
     const toggleVisiblePass = () => setIsVisiblePass((prev) => !prev);
 
     //password strength feature
     useEffect(() => {
         setPassStrength(passwordStrength(watch().password).id)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [watch().password]);
 
     //obtain SubmitHandler from React-hook-form
     const saveUser: SubmitHandler<InputType> = async (data) => {
-        const { accepted, confirmPassword, ...user } = data; 
+        const { accepted, confirmPassword, ...user } = data;
         try {
             const result = await registerUser(user);
-            toast.success("The User Registered Successfully");
+            toast.success("An activation link has been sent to your email");
         } catch (error) {
             toast.error("Something Went Wrong");
             console.error(error);
         }
     }
 
-  return (
-    <form onSubmit={handleSubmit(saveUser)} className="grid grid-cols-2 gap-3 p-2 place-self-stretch shadow border rounded-md">
-        <Input
-            {...register("firstName")} 
-            errorMessage={errors.firstName?.message}
-            isInvalid={!!errors.firstName}
-            label="First Name" 
-            startContent={<UserIcon className="w-4" />}
-        />
-        <Input 
-            {...register("lastName")}
-            errorMessage={errors.lastName?.message}
-            isInvalid={!!errors.lastName}
-            label="Last Name" 
-            startContent={<UserIcon className="w-4" />}
-        />
-        <Input 
-            {...register("email")}
-            errorMessage={errors.email?.message}
-            isInvalid={!!errors.email}
-            label="Email" 
-            className="col-span-2" 
-            startContent={<EnvelopeIcon className="w-4" />}
-        />
-        <Input
-            {...register("phone")} 
-            errorMessage={errors.phone?.message}
-            isInvalid={!!errors.phone}
-            label="Phone" 
-            className="col-span-2" 
-            startContent={<PhoneIcon className="w-4" />}
-        />
-        <Input
-            {...register("password")}
-            errorMessage={errors.password?.message}
-            isInvalid={!!errors.password} 
-            label="Password" 
-            type={isVisiblePass ? "text" : "password"} 
-            className="col-span-2" 
-            startContent={<KeyIcon className="w-4" />}
-            endContent={
-                isVisiblePass ? 
-                    <EyeSlashIcon className="w-4 cursor-pointer" onClick={toggleVisiblePass} />
-                :
-                    <EyeIcon className="w-4 cursor-pointer" onClick={toggleVisiblePass} /> 
-            }
-        />
-        <PasswordStrength passStrength={passStrength} />
-        <Input
-            {...register("confirmPassword")} 
-            errorMessage={errors.confirmPassword?.message}
-            isInvalid={!!errors.confirmPassword}
-            label="Confirm Password" 
-            type={isVisiblePass ? "text" : "password"} 
-            className="col-span-2" 
-            startContent={<KeyIcon className="w-4" />}
-        />
-        <Controller 
-            control={control} 
-            name="accepted" 
-            render={({field}) => (
-                <Checkbox 
-                    onChange={field.onChange} 
-                    onBlur={field.onBlur}
-                    className="col-span-2">
-                    I Accept The <Link href="/terms">Terms</Link>
-                </Checkbox>
-            )} 
-        />
-        {!!errors.accepted && <p className="text-red-500">{errors.accepted.message}</p>}
-        <div className="flex justify-center col-span-2">
-            <Button color="primary" type="submit" className="w-48">
-                Submit
-            </Button>
-        </div>
-    </form>
-  )
+    return (
+        <form onSubmit={handleSubmit(saveUser)} className="grid grid-cols-2 gap-3 p-2 place-self-stretch shadow border rounded-md">
+            <Input
+                {...register("firstName")}
+                errorMessage={errors.firstName?.message}
+                isInvalid={!!errors.firstName}
+                label="First Name"
+                startContent={<UserIcon className="w-4" />}
+            />
+            <Input
+                {...register("lastName")}
+                errorMessage={errors.lastName?.message}
+                isInvalid={!!errors.lastName}
+                label="Last Name"
+                startContent={<UserIcon className="w-4" />}
+            />
+            <Input
+                {...register("email")}
+                errorMessage={errors.email?.message}
+                isInvalid={!!errors.email}
+                label="Email"
+                className="col-span-2"
+                startContent={<EnvelopeIcon className="w-4" />}
+            />
+            <Input
+                {...register("phone")}
+                errorMessage={errors.phone?.message}
+                isInvalid={!!errors.phone}
+                label="Phone"
+                className="col-span-2"
+                startContent={<PhoneIcon className="w-4" />}
+            />
+            <Input
+                {...register("password")}
+                errorMessage={errors.password?.message}
+                isInvalid={!!errors.password}
+                label="Password"
+                type={isVisiblePass ? "text" : "password"}
+                className="col-span-2"
+                startContent={<KeyIcon className="w-4" />}
+                endContent={
+                    isVisiblePass ?
+                        <EyeSlashIcon className="w-4 cursor-pointer" onClick={toggleVisiblePass} />
+                        :
+                        <EyeIcon className="w-4 cursor-pointer" onClick={toggleVisiblePass} />
+                }
+            />
+            <PasswordStrength passStrength={passStrength} />
+            <Input
+                {...register("confirmPassword")}
+                errorMessage={errors.confirmPassword?.message}
+                isInvalid={!!errors.confirmPassword}
+                label="Confirm Password"
+                type={isVisiblePass ? "text" : "password"}
+                className="col-span-2"
+                startContent={<KeyIcon className="w-4" />}
+            />
+            <Controller
+                control={control}
+                name="accepted"
+                render={({ field }) => (
+                    <Checkbox
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        className="col-span-2">
+                        I Accept The <Link href="/terms">Terms</Link>
+                    </Checkbox>
+                )}
+            />
+            {!!errors.accepted && <p className="text-red-500">{errors.accepted.message}</p>}
+            <div className="flex justify-center col-span-2">
+                <Button color="primary" type="submit" className="w-48">
+                    Submit
+                </Button>
+            </div>
+        </form>
+    )
 }

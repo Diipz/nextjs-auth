@@ -1,4 +1,4 @@
-import { Button, Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
+import { Navbar, NavbarContent, NavbarItem } from "@nextui-org/react";
 import SignInButton from "./SignInButton";
 import Link from "next/link";
 

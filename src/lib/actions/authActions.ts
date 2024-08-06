@@ -7,7 +7,7 @@ import { compileActivationTemplate, compileResetPassTemplate, sendMail } from ".
 import { signJwt, signJwtResetPass, verifyJwt } from "../jwt";
 
 export async function registerUser(
-    user: Omit<User, "id" | "emailVerified" | "image">
+    user: Omit<User, "id" | "emailVerified" | "image" | "stripe_customer_id">
 ) {
 
     const result = await prisma.user.create({
