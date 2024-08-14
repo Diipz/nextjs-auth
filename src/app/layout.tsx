@@ -6,6 +6,7 @@ import Appbar from "./components/Appbar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { twMerge } from 'tailwind-merge';
+import Header from "../sections/Header";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,10 +23,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className={twMerge(inter.className, "bg-black text-white antialiased")}>
         <Providers>
-          <Appbar />
+          <Header />
           {children}
           <ToastContainer />
         </Providers>

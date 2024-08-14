@@ -12,8 +12,8 @@ import { z } from "zod"
 
 const FormSchema = z.object({
     email: z
-    .string()
-    .email("Please enter a valid NHS email address")
+        .string()
+        .email("Please enter a valid NHS email address")
 })
 
 type InputType = z.infer<typeof FormSchema>;
@@ -21,52 +21,52 @@ type InputType = z.infer<typeof FormSchema>;
 export default function ForgotPasswordPage() {
 
     const {
-        register, 
-        handleSubmit, 
-        reset, 
-        formState:{errors, isSubmitting}
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors, isSubmitting }
     } = useForm<InputType>({
         resolver: zodResolver(FormSchema),
     })
 
     const submitRequest: SubmitHandler<InputType> = async (data) => {
-       try {
+        try {
             const result = await forgotPassword(data.email);
             toast.success("A reset password link was sent to your email");
             console.log("success");
             reset();
-       } catch (error) {
-           console.log(error);
-           toast.error("Something went wrong!"); 
-       };
+        } catch (error) {
+            console.log(error);
+            toast.error("Something went wrong!");
+        };
     }
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 items-center">
             <form onSubmit={handleSubmit(submitRequest)} className="flex flex-col gap-2 m-2 p-2 border rounded-md shadow">
                 <div className="text-center p-2">Enter your email</div>
-                <Input 
+                <Input
                     label="Email"
                     {...register("email")}
                     errorMessage={errors.email?.message}
-                    isInvalid={!!errors.email}   
-                    startContent={<EnvelopeIcon 
-                        className="w-4" />} 
+                    isInvalid={!!errors.email}
+                    startContent={<EnvelopeIcon
+                        className="w-4" />}
                 />
                 <Button
-                    type="submit" 
+                    type="submit"
                     isLoading={isSubmitting}
                     disabled={isSubmitting}
                     color="primary">
-                        {isSubmitting ? "Please wait..." : "Submit"}    
+                    {isSubmitting ? "Please wait..." : "Submit"}
                 </Button>
             </form>
-            <Image 
-                src={"/forgotPass.png"} 
-                width={500} height={500} 
+            <Image
+                src={"/forgotPass.png"}
+                width={500} height={500}
                 alt="Forgot Password"
                 className="col-span-2 place-self-center"
-            />    
+            />
         </div>
     )
 }
