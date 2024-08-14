@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import StyledSignInButton from "@/app/components/StyledSignInButton";
+import StyledButton from "@/app/components/StyledButton";
 import starsBg from "../assets/stars.png";
 import { useRef } from "react";
 
@@ -103,10 +103,10 @@ export default function Hero() {
                 <p className="text-lg md:text-xl text-white/70 mt-5 text-center max-w-xl mx-auto">
                     Elevate your site's visibility effortlessly with AI, where smart technology meets user-friendly SEO tools.
                 </p>
-                <div className="flex justify-center mt-5">
-                    <StyledSignInButton>
-                        Join waitlist
-                    </StyledSignInButton>
+                <div className="flex justify-center mt-5 w-[100px] mx-auto">
+                    <StyledButton>
+                        Register
+                    </StyledButton>
                 </div>
             </div>
         </motion.section>

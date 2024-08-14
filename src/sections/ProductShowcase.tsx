@@ -10,7 +10,7 @@ export default function ProductShowcase() {
     const appImage = useRef<HTMLImageElement>(null);
     const { scrollYProgress } = useScroll({
         target: appImage,
-        offset: ["start end", "end center"]
+        offset: ["start end", "center center"]
     });
 
     const rotateX = useTransform(scrollYProgress, [0, 1], [15, 0]);

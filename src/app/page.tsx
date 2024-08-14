@@ -7,6 +7,7 @@ import Features from "@/sections/Features";
 import ProductShowcase from "@/sections/ProductShowcase";
 import FAQs from "@/sections/FAQs";
 import Footer from "@/sections/Footer";
+import Contact from "@/sections/Contact";
 
 export default async function Home() {
 
@@ -25,6 +26,7 @@ export default async function Home() {
       <ProductShowcase />
       <FAQs />
       <CallToAction />
+      <Contact />
       <Footer />
     </>
   );

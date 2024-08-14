@@ -3,7 +3,7 @@
 import LogoIcon from "@/assets/logo.svg";
 import MenuIcon from "@/assets/icon-menu.svg";
 import CrossIcon from "@/assets/x.svg";
-import StyledSignInButton from "@/app/components/StyledSignInButton";
+import StyledButton from "@/app/components/StyledButton";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -42,13 +42,14 @@ export default function Header() {
                     <div className="hidden md:block">
                         <nav className="flex gap-8 text-sm">
                             <a className="text-white/70 hover:text-white transition" href="#">About</a>
-                            <a className="text-white/70 hover:text-white transition" href="#">Features</a>
-                            <a className="text-white/70 hover:text-white transition" href="#">Updates</a>
-                            <a className="text-white/70 hover:text-white transition" href="#">Help</a>
+                            <a className="text-white/70 hover:text-white transition" href="#">Interface</a>
+                            <a className="text-white/70 hover:text-white transition" href="#">FAQ</a>
+                            <a className="text-white/70 hover:text-white transition" href="#">Contact</a>
                         </nav>
                     </div>
                     <div className="flex gap-4 items-center">
-                        <StyledSignInButton>Join waitlist</StyledSignInButton>
+                        <StyledButton>Register</StyledButton>
+                        <StyledButton>Sign In</StyledButton>
                         <button
                             className="md:hidden flex justify-center items-center w-8 h-8 rounded-full"
                             onClick={handleDropdownToggle}
@@ -89,7 +90,7 @@ export default function Header() {
                                                 className="block py-2 px-4 hover:bg-[#4a208a]/75 transition rounded-md"
                                                 href="#"
                                             >
-                                                Features
+                                                Interface
                                             </a>
                                         </li>
                                         <li>
@@ -97,7 +98,7 @@ export default function Header() {
                                                 className="block py-2 px-4 hover:bg-[#4a208a]/75 transition rounded-md"
                                                 href="#"
                                             >
-                                                Updates
+                                                FAQ
                                             </a>
                                         </li>
                                         <li>
@@ -105,7 +106,7 @@ export default function Header() {
                                                 className="block py-2 px-4 hover:bg-[#4a208a]/75 transition rounded-md"
                                                 href="#"
                                             >
-                                                Help
+                                                Contact
                                             </a>
                                         </li>
                                     </ul>
