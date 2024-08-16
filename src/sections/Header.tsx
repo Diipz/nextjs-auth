@@ -4,16 +4,32 @@ import LogoIcon from "@/assets/logo.svg";
 import MenuIcon from "@/assets/icon-menu.svg";
 import CrossIcon from "@/assets/x.svg";
 import StyledButton from "@/app/components/StyledButton";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 
 export default function Header() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef<HTMLButtonElement>(null);
 
     const handleDropdownToggle = () => {
         setDropdownOpen(!dropdownOpen);
     };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            setDropdownOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
 
     useEffect(() => {
         const mediaQuery = window.matchMedia("(min-width: 768px)");
@@ -28,6 +44,8 @@ export default function Header() {
         };
     }, []);
 
+
+
     return (
         <header className="py-4 border-b border-white/15 md:border-none sticky top-0 z-10">
             <div className="absolute inset-0 backdrop-blur -z-10 md:hidden"></div>
@@ -41,20 +59,21 @@ export default function Header() {
                     </div>
                     <div className="hidden md:block">
                         <nav className="flex gap-8 text-sm">
-                            <a className="text-white/70 hover:text-white transition" href="#">About</a>
-                            <a className="text-white/70 hover:text-white transition" href="#">Interface</a>
-                            <a className="text-white/70 hover:text-white transition" href="#">FAQ</a>
-                            <a className="text-white/70 hover:text-white transition" href="#">Contact</a>
+                            <a className="text-white/70 hover:text-white transition" href="#about-section">About</a>
+                            <a className="text-white/70 hover:text-white transition" href="#product-section">Interface</a>
+                            <a className="text-white/70 hover:text-white transition" href="#faq-section">FAQ</a>
+                            <a className="text-white/70 hover:text-white transition" href="#contact-section">Contact</a>
                         </nav>
                     </div>
                     <div className="flex gap-4 items-center">
                         <StyledButton>Register</StyledButton>
                         <StyledButton>Sign In</StyledButton>
                         <button
-                            className="md:hidden flex justify-center items-center w-8 h-8 rounded-full"
+                            className="md:hidden flex justify-center w-8 h-8 rounded-full"
                             onClick={handleDropdownToggle}
+                            ref={dropdownRef}
                         >
-                            {dropdownOpen ? <CrossIcon className="w-6 h-6" /> : <MenuIcon className="w-8 h-8" />}
+                            {dropdownOpen ? <CrossIcon className="w-8 h-8" /> : <MenuIcon className="w-8 h-8" />}
                         </button>
                         <AnimatePresence>
                             {dropdownOpen && (
@@ -80,7 +99,7 @@ export default function Header() {
                                         <li>
                                             <a
                                                 className="block py-2 px-4 hover:bg-[#4a208a]/75 transition rounded-md"
-                                                href="#"
+                                                href="#about-section"
                                             >
                                                 About
                                             </a>
@@ -88,7 +107,7 @@ export default function Header() {
                                         <li>
                                             <a
                                                 className="block py-2 px-4 hover:bg-[#4a208a]/75 transition rounded-md"
-                                                href="#"
+                                                href="#product-section"
                                             >
                                                 Interface
                                             </a>
@@ -96,7 +115,7 @@ export default function Header() {
                                         <li>
                                             <a
                                                 className="block py-2 px-4 hover:bg-[#4a208a]/75 transition rounded-md"
-                                                href="#"
+                                                href="#faq-section"
                                             >
                                                 FAQ
                                             </a>
@@ -104,7 +123,7 @@ export default function Header() {
                                         <li>
                                             <a
                                                 className="block py-2 px-4 hover:bg-[#4a208a]/75 transition rounded-md"
-                                                href="#"
+                                                href="#contact-section"
                                             >
                                                 Contact
                                             </a>

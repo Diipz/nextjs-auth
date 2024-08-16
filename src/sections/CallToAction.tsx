@@ -74,8 +74,8 @@ export default function CallToAction() {
                     >
                     </motion.div>
                     <div className="relative">
-                        <h2 className="text-5xl md:text-6xl max-w-sm mx-auto tracking-tighter text-center font-medium">AI-driven SEO for everyone</h2>
-                        <p className="text-center text-lg md:text-xl max-w-xs mx-auto text-white/70 px-4 mt-5 tracking-tight">Achieve clear, impactful results without the complexity.</p>
+                        <h2 className="text-5xl md:text-6xl max-w-sm mx-auto tracking-tighter text-center font-medium">Apothetory</h2>
+                        <p className="text-center text-lg md:text-xl max-w-xs mx-auto text-white/70 px-4 mt-5 tracking-tight">Explore the possibilities with talented pharmacists.</p>
                         <div className="flex justify-center mt-8 w-[150px] mx-auto">
                             <StyledSignInButton>Register</StyledSignInButton>
                         </div>
