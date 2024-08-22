@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react";
-import EcosystemIcon from "../../assets/ecosystem.svg";
+import EcosystemIcon from "../../../public/assets/ecosystem.svg";
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 
 export default function Feature({ title, description }: { title: string, description: string }) {

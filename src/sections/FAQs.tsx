@@ -1,28 +1,33 @@
 "use client"
 
 import { useState } from "react";
-import PlusIcon from "../assets/plus.svg"
-import MinusIcon from "../assets/minus.svg"
+import PlusIcon from "../../public/assets/plus.svg"
+import MinusIcon from "../../public/assets/minus.svg"
 import { motion, AnimatePresence } from "framer-motion";
 
 const items = [
     {
         id: 1,
+        question: "Why choose you?",
+        answer: "Our platform offers organisations the flexibility to select and negotiate fees directly with pharmacists they consider best suited to their needs. Experienced pharmacists oversee the rigorous recruitment process ensuring that only the most qualified and accomplished professionals are placed in your organisation. We pride ourselves on discovering pharmacists that gravitate towards excellence",
+    },
+    {
+        id: 2,
         question: "Who can sign up?",
         answer: "An NHS-registered general practice or primary care network can sign-up by selecting the register button and completing the form using a valid NHS email address. Upon submission, you will receive an activation email to finalise the registration process.",
     },
     {
-        id: 2,
+        id: 3,
         question: "How does billing work?",
         answer: "Billing is handled on an annual subscription basis and your organisation will be billed for the full year upfront. Organisations benefit from the flexibility of unlimited scheduling, making it a more cost-effective those requiring long-term coverage. Renewal occurs automatically at the end of each subscription term unless you choose to cancel. We will notify you before your renewal date to confirm any updates or changes to your plan.",
     },
     {
-        id: 3,
+        id: 4,
         question: "What if I change my mind?",
         answer: "Refunds can be requested by contacting customer support at apothetory@protonmail.com. Please reach out to our support team to initiate the process, and they will assist you with the refund request according to our policy",
     },
     {
-        id: 4,
+        id: 5,
         question: "Is my data secure?",
         answer: "Our platform employs advanced encryption and security measures to protect your information. We adhere to strict data protection standards and regularly review our security protocols to ensure the highest level of security and compliance with industry regulations",
     }

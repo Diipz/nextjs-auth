@@ -1,4 +1,4 @@
-import Logo from "../assets/logo.svg"
+import Logo from "../../public/assets/logo.svg"
 export default function Footer() {
     return (
         <footer className="py-5 mt-[72px] border-t border-white/15 bg-[#190d2e]">

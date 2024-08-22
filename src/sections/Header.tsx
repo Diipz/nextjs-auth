@@ -1,8 +1,8 @@
 "use client"
 
-import LogoIcon from "@/assets/logo.svg";
-import MenuIcon from "@/assets/icon-menu.svg";
-import CrossIcon from "@/assets/x.svg";
+import LogoIcon from "../../public/assets/logo.svg";
+import MenuIcon from "../../public/assets/icon-menu.svg";
+import CrossIcon from "../../public/assets/x.svg";
 import StyledButton from "@/app/components/StyledButton";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -66,8 +66,8 @@ export default function Header() {
                         </nav>
                     </div>
                     <div className="flex gap-4 items-center">
-                        <StyledButton>Register</StyledButton>
-                        <StyledButton>Sign In</StyledButton>
+                        <StyledButton text={"Register"} link={"/auth/signup"}></StyledButton>
+                        <StyledButton text={"Sign In"} link={"/auth/signup"}></StyledButton>
                         <button
                             className="md:hidden flex justify-center w-8 h-8 rounded-full"
                             onClick={handleDropdownToggle}

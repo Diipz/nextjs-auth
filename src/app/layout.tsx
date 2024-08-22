@@ -26,7 +26,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={twMerge(inter.className, "bg-black text-white antialiased")}>
         <Providers>
-          <Header />
           {children}
           <ToastContainer />
         </Providers>

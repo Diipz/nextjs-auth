@@ -10,7 +10,7 @@ export default function Contact() {
                 <form className="mt-10 flex flex-col gap-2.5 max-w-sm mx-auto sm:flex-row">
                     <input type="email" placeholder="your@email.com" className="h-12 bg-white/20 rounded-lg px-5 font-medium placeholder:text-[#9CA3AF] flex-1" />
                     <div className="flex justify-center items-center w-[80px] h-12">
-                        <StyledButton>Submit</StyledButton>
+                        <StyledButton text="Submit" link={"/auth/signup"}></StyledButton>
                     </div>
                 </form>
             </div>

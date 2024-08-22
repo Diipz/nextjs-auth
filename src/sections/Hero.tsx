@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import StyledButton from "@/app/components/StyledButton";
-import starsBg from "../assets/stars.png";
+import starsBg from "../../public/assets/stars.png";
 import { useRef } from "react";
 
 export default function Hero() {
@@ -97,15 +97,14 @@ export default function Hero() {
             </motion.div>
             {/*End Ring 3*/}
             <div className="container relative mt-16">
-                <h1 className="text-6xl md:text-9xl md:leading-none font-semibold tracking-tighter bg-white bg-[radial-gradient(100%_100%_at_top_left,white,white,rgb(74,32,138,.5))] text-transparent bg-clip-text text-center md:h-36 h-20">
+                <h1 className="text-6xl md:text-9xl md:leading-none font-semibold tracking-tighter bg-white bg-[radial-gradient(100%_100%_at_top_left,white,white,rgb(74,32,138,.5))] text-transparent bg-clip-text text-center md:h-36 h-16">
                     Apothetory
                 </h1>
                 <p className="text-lg md:text-xl text-white/70 text-center max-w-xl mx-auto ">
-                    A specialised agency for connecting distinguished pharmacists with primary care.
+                    A digital agency connecting pharmacists to primary care.
                 </p>
                 <div className="flex justify-center mt-5 w-[100px] mx-auto">
-                    <StyledButton>
-                        Register
+                    <StyledButton text={"Register"} link={"/auth/signup"}>
                     </StyledButton>
                 </div>
             </div>
