@@ -20,9 +20,9 @@ export default function Mission() {
     return (
         <section id="about-section" className="bg-black text-white py-[72px] px-4 sm:py-24">
             <div className="container">
-                <h2 className="text-center font-bold text-5xl md:text-6xl tracking-tighter">Our Mission</h2>
+                <h2 className="text-center md:font-bold font-medium text-5xl md:text-6xl tracking-tighter">Our Mission</h2>
                 <div className="max-w-xl mx-auto">
-                    <p className="text-center mt-5 text-xl text-white/70">At Apothetory, we made it our mission to discover only the most distinguished pharmacists and connect them with general practices. Our novel platform enables organisations to find and negotiate fees directly with clinical pharmacists.
+                    <p className="text-center mt-5 text-lg md:text-xl text-white/70">At Apothetory, we made it our mission to discover only the most distinguished pharmacists and connect them with general practices. Our novel platform enables organisations to find and negotiate fees directly with clinical pharmacists.
                     </p>
                 </div>
             </div>

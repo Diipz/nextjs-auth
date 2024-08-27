@@ -40,7 +40,7 @@ const AccordianItem = ({ question, answer }: { question: string, answer: string 
     return (
         <div className="py-7 border-b max-w-[400px] md:max-w-[720px] lg:max-w-[1038px] mx-auto border-white/30" onClick={() => setIsOpen(!isOpen)}>
             <div className="flex items-center">
-                <span className="flex-1 text-lg font-bold">{question}</span>
+                <span className="flex-1 text-lg md:font-bold font-medium">{question}</span>
                 {isOpen ? <MinusIcon /> : <PlusIcon />}
             </div>
             <AnimatePresence>
@@ -74,7 +74,7 @@ export default function FAQs() {
     return (
         <section id="faq-section" className="bg-black text-white bg-gradient-to-b from-[#5D2CA8] to-black py-[72px] sm:py-24 px-4">
             <div className="container">
-                <h2 className="text-center font-bold text-5xl md:text-6xl sm:max-w-[720px] lg:max-w-[1038px] mx-auto tracking-tighter">Frequently asked questions</h2>
+                <h2 className="text-center md:font-bold font-medium text-5xl md:text-6xl sm:max-w-[720px] lg:max-w-[1038px] mx-auto tracking-tighter">Frequently asked questions</h2>
             </div>
             <div className="mt-12 max-w-[720px] lg:max-w-[1038px] mx-auto">
                 {items.map(({ id, question, answer }) => (

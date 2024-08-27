@@ -19,9 +19,9 @@ export default function ProductShowcase() {
     return (
         <section id="product-section" className="bg-black text-white bg-gradient-to-b from-black to-[#5D2CA8] py-[72px] sm:py-24">
             <div className="container">
-                <h2 className="text-center text-5xl md:text-6xl font-bold tracking-tighter">Intuitive Interface</h2>
+                <h2 className="text-center text-5xl md:text-6xl md:font-bold font-medium tracking-tighter">Intuitive Interface</h2>
                 <div className=" mx-auto">
-                    <p className="text-xl text-center text-white/70 mt-5">A user-friendly design that simplifies navigation and saves time.</p>
+                    <p className="text-lg md:text-xl text-center text-white/70 mt-5">A user-friendly design that simplifies navigation and saves time.</p>
                     <motion.div
                         style={{
                             opacity: opacity,

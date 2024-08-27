@@ -11,6 +11,7 @@ import Contact from "@/sections/Contact";
 import Header from "@/sections/Header";
 import Appbar from "./components/Appbar";
 import LogoTicker from "../sections/LogoTicker";
+import Testimonials from "@/sections/Testimonials";
 
 export default async function Home() {
 
@@ -33,6 +34,7 @@ export default async function Home() {
       <Mission />
       <ProductShowcase />
       <FAQs />
+      <Testimonials />
       <CallToAction />
       <Contact />
       <Footer />

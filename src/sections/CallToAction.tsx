@@ -74,7 +74,7 @@ export default function CallToAction() {
                     >
                     </motion.div>
                     <div className="relative">
-                        <h2 className="text-5xl md:text-6xl max-w-sm mx-auto tracking-tighter text-center font-medium">Apothetory</h2>
+                        <h2 className="text-5xl md:text-6xl max-w-sm mx-auto tracking-tighter text-center font-medium md:font-bold">Apothetory</h2>
                         <p className="text-center text-lg md:text-xl max-w-xs mx-auto text-white/70 px-4 mt-5 tracking-tight">Discover talented pharmacists, elevate your care.</p>
                         <div className="flex justify-center mt-8 w-[150px] mx-auto">
                             <StyledSignInButton text={"Register"} link={"/auth/signup"}></StyledSignInButton>
