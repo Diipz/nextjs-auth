@@ -39,30 +39,30 @@ export default function ResetPasswordForm({ jwtUserId }: Props) {
 
     const {
         register,
-        handleSubmit, 
+        handleSubmit,
         reset,
         watch,
-        formState: { errors, isSubmitting} 
+        formState: { errors, isSubmitting }
     } = useForm<InputType>({
         resolver: zodResolver(FormSchema),
     })
 
     useEffect(() => {
         setPassStrength(passwordStrength(watch().password).id)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [watch().password]);
 
     const resetPass: SubmitHandler<InputType> = async (data) => {
         try {
             const result = await resetPassword(jwtUserId, data.password);
-            if(result === "success") toast.success("Password Reset Successful");
+            if (result === "success") toast.success("Password Reset Successful");
             router.push("/");
         } catch (error) {
             toast.error("Something went wrong!");
         }
 
-    } 
-    
+    }
+
     return (
         <form onSubmit={handleSubmit(resetPass)} className="flex flex-col gap-2 p-2 m-2 border rounded-md shadow w-full" >
             <div className="text-center p-2">Reset your password</div>
@@ -72,14 +72,14 @@ export default function ResetPasswordForm({ jwtUserId }: Props) {
                 {...register("password")}
                 errorMessage={errors.password?.message}
                 endContent={
-                    <button 
-                        type="button" 
+                    <button
+                        type="button"
                         onClick={() => setVisiblePass((prev) => !prev)}>
-                            {visiblePass ? (
-                                <EyeSlashIcon className="w-4" />
-                            ) : (
-                                <EyeIcon className="w-4" /> 
-                            )}    
+                        {visiblePass ? (
+                            <EyeSlashIcon className="w-4" />
+                        ) : (
+                            <EyeIcon className="w-4" />
+                        )}
                     </button>
                 }
             />
@@ -92,11 +92,11 @@ export default function ResetPasswordForm({ jwtUserId }: Props) {
             />
             <div className="flex justify-center">
                 <Button
-                    type="submit" 
+                    type="submit"
                     isLoading={isSubmitting}
                     disabled={isSubmitting}
                     color="primary">
-                        {isSubmitting ? "Please wait..." : "Submit"}    
+                    {isSubmitting ? "Please wait..." : "Submit"}
                 </Button>
             </div>
         </form>

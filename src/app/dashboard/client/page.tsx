@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
-import { authOptions } from '../api/auth/[...nextauth]/route';
-import { createCheckoutLink, createCustomerIfNull, generateCustomerPortalLink, hasSubscription } from '../../lib/billing';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { createCheckoutLink, createCustomerIfNull, generateCustomerPortalLink, hasSubscription } from '@/lib/billing';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import prisma from '@/lib/prisma';

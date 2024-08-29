@@ -2,7 +2,7 @@
 "use client"
 
 import { EnvelopeIcon, EyeIcon, EyeSlashIcon, KeyIcon, PhoneIcon, UserIcon } from "@heroicons/react/20/solid";
-import { Button, Checkbox, Input, Link, user } from "@nextui-org/react";
+import { Button, Checkbox, Input, Link } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import validator from "validator";
@@ -63,7 +63,6 @@ export default function SignUpForm() {
     const {
         register,
         handleSubmit,
-        reset,
         control,
         watch,
         formState: { errors }
@@ -99,6 +98,7 @@ export default function SignUpForm() {
         <form onSubmit={handleSubmit(saveUser)} className="grid grid-cols-2 gap-3 p-2 place-self-stretch shadow border rounded-md">
             <Input
                 {...register("firstName")}
+                id="firstName"
                 errorMessage={errors.firstName?.message}
                 isInvalid={!!errors.firstName}
                 label="First Name"
@@ -106,6 +106,7 @@ export default function SignUpForm() {
             />
             <Input
                 {...register("lastName")}
+                id="lastName"
                 errorMessage={errors.lastName?.message}
                 isInvalid={!!errors.lastName}
                 label="Last Name"
@@ -113,6 +114,8 @@ export default function SignUpForm() {
             />
             <Input
                 {...register("email")}
+                id="email"
+                autoComplete="on"
                 errorMessage={errors.email?.message}
                 isInvalid={!!errors.email}
                 label="Email"
@@ -121,6 +124,8 @@ export default function SignUpForm() {
             />
             <Input
                 {...register("phone")}
+                id="phone"
+                autoComplete="on"
                 errorMessage={errors.phone?.message}
                 isInvalid={!!errors.phone}
                 label="Phone"
@@ -129,6 +134,7 @@ export default function SignUpForm() {
             />
             <Input
                 {...register("password")}
+                id="password"
                 errorMessage={errors.password?.message}
                 isInvalid={!!errors.password}
                 label="Password"
@@ -145,6 +151,7 @@ export default function SignUpForm() {
             <PasswordStrength passStrength={passStrength} />
             <Input
                 {...register("confirmPassword")}
+                id="confirmPassword"
                 errorMessage={errors.confirmPassword?.message}
                 isInvalid={!!errors.confirmPassword}
                 label="Confirm Password"
@@ -157,10 +164,11 @@ export default function SignUpForm() {
                 name="accepted"
                 render={({ field }) => (
                     <Checkbox
+                        name="checkbox"
                         onChange={field.onChange}
                         onBlur={field.onBlur}
-                        className="col-span-2">
-                        I Accept The <Link href="/terms">Terms</Link>
+                        className="col-span-2"><span className=" text-white">I Accept The </span>
+                        <Link href="/terms">Terms</Link>
                     </Checkbox>
                 )}
             />

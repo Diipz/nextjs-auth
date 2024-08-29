@@ -56,7 +56,7 @@ export default function SignInForm(props: Props) {
         }
 
         toast.success("Sign in successful");
-        router.push("/");
+        router.push("/dashboard");
     }
 
     return (
@@ -69,6 +69,7 @@ export default function SignInForm(props: Props) {
                 <Input
                     {...register("email")}
                     label="Email"
+                    autoComplete="on"
                     errorMessage={errors.email?.message}
                     isInvalid={!!errors.email}
                 />

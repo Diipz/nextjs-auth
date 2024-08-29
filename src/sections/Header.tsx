@@ -67,7 +67,7 @@ export default function Header() {
                     </div>
                     <div className="flex gap-4 items-center">
                         <StyledButton text={"Register"} link={"/auth/signup"}></StyledButton>
-                        <StyledButton text={"Sign In"} link={"/auth/signup"}></StyledButton>
+                        <StyledButton text={"Sign In"} link={"/auth/signin"}></StyledButton>
                         <button
                             className="md:hidden flex justify-center w-8 h-8 rounded-full"
                             onClick={handleDropdownToggle}

@@ -6,7 +6,7 @@ interface SignOption {
 
 //set login link expiry
 const DEFAULT_SIGN_OPTION: SignOption = {
-    expiresIn: "10m"
+    expiresIn: "12h"
 }
 
 //set reset password link expiry

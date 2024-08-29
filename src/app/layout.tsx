@@ -2,11 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-import Appbar from "./components/Appbar";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 import { twMerge } from 'tailwind-merge';
-import Header from "../sections/Header";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={twMerge(inter.className, "bg-black text-white antialiased")}>
+    <html lang="en" className=" dark">
+      <body className={twMerge(inter.className, " text-white antialiased h-full")}>
         <Providers>
           {children}
           <ToastContainer />
