@@ -56,7 +56,7 @@ export default function SignInForm(props: Props) {
         }
 
         toast.success("Sign in successful");
-        router.push("/dashboard");
+        router.push("/dashboard/client");
     }
 
     return (

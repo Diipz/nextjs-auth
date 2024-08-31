@@ -10,6 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserType {
+  CLIENT
+  ASSOCIATE
+}
+
 model User {
   id                 String    @id @default(cuid()) @db.VarChar(255)
   firstName          String    @db.VarChar(255)
@@ -20,6 +25,7 @@ model User {
   phone              String    @db.VarChar(255)
   image              String?   @db.VarChar(255)
   stripe_customer_id String?   @db.VarChar(255)
+  userType           UserType
   accounts           Account[]
   sessions           Session[]
 
