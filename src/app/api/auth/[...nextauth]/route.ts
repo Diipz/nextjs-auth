@@ -14,7 +14,7 @@ export const authOptions : AuthOptions = {
     // Session expires in 2 hours
     session: {
         strategy: "jwt",
-        maxAge: 120 * 60
+        maxAge: 0.5 * 60
     },
 
     providers :[   

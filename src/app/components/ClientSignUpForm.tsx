@@ -55,7 +55,7 @@ const FormSchema = z.object({
 
 type InputType = z.infer<typeof FormSchema>
 
-export default function SignUpForm() {
+export default function ClientSignUpForm() {
 
     const router = useRouter();
 
@@ -77,7 +77,6 @@ export default function SignUpForm() {
     //password strength feature
     useEffect(() => {
         setPassStrength(passwordStrength(watch().password).id)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [watch().password]);
 
     //obtain SubmitHandler from React-hook-form
