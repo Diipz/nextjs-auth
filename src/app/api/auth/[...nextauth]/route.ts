@@ -14,7 +14,7 @@ export const authOptions : AuthOptions = {
     // Session expires in 2 hours
     session: {
         strategy: "jwt",
-        maxAge: 0.5 * 60
+        maxAge: 120 * 60
     },
 
     providers :[   
@@ -30,7 +30,15 @@ export const authOptions : AuthOptions = {
                 password: {
                     label: "Password",
                     type: "password"
-                }        
+                },
+                accountType: {
+                    label: "Account Type",
+                    type: "select",
+                    options: [
+                      { value: "client", label: "Client" },
+                      { value: "associate", label: "Associate" }
+                    ]
+                  }
             },
             //Once user clicks sign in, the username and password are passed as credentials
             async authorize(credentials) {
@@ -50,6 +58,13 @@ export const authOptions : AuthOptions = {
 
                 if(!user.emailVerified) throw new Error("Please verify your email");
 
+                const userAccountTypeLower = user.accountType.toLowerCase();
+                console.log(userAccountTypeLower);
+                console.log(credentials?.accountType);
+                if (credentials?.accountType !== userAccountTypeLower) {
+                    throw new Error("Account type mismatch");
+                }
+                
                 //successful login
                 const { password, ...userWithoutPass } = user;
                 //userWithoutPass sent to NextAuth session

@@ -5,6 +5,7 @@ import { Link } from "@nextui-org/react";
 export default function SignUpPage() {
   return (
 
+    // TODO: LOGIC TO DISPLAY EITHER CLIENT OR ASSOCIATE SIGNUP FORM
     <div className="flex justify-center items-center h-[1000px]">
       <div className="grid grid-cols-1 md:grid-cols-2 place-items-center items-center px-2 gap-3">
         <div className="md:col-span-2 flex justify-center items-center">

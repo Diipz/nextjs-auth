@@ -3,6 +3,7 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/20/solid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@nextui-org/react";
+import { AccountType } from "@prisma/client";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -19,7 +20,8 @@ const FormSchema = z.object({
     email: z.string().email("Please enter a valid NHS email address"),
     password: z.string({
         required_error: "Please enter your password"
-    })
+    }),
+    accountType: z.enum(['client', 'associate'])
 })
 
 //define new Typescript type using "type"
@@ -31,6 +33,7 @@ export default function SignInForm(props: Props) {
     const router = useRouter();
 
     const [visiblePass, setVisiblePass] = useState(false);
+    const [selectedAccountType, setSelectedAccountType] = useState('');
 
     const {
         register,
@@ -43,12 +46,13 @@ export default function SignInForm(props: Props) {
 
     //SubmitHandler from react-hook-form
     const onSubmit: SubmitHandler<InputType> = async (data) => {
-        //when calling "signIn" function from next/auth, we are actually calling the "authorize" function from "CredentialsProvider" on line 30 of /api/auth/route.ts
+        //when calling "signIn" function from next/auth, we are actually calling the "authorize" function from "CredentialsProvider" on /api/auth/route.ts
         const result = await signIn("credentials", {
             //stop page refresh
             redirect: false,
             username: data.email,
-            password: data.password
+            password: data.password,
+            accountType: data.accountType
         })
         if (!result?.ok) {
             toast.error(result?.error);
@@ -56,7 +60,13 @@ export default function SignInForm(props: Props) {
         }
 
         toast.success("Sign in successful");
-        router.push("/dashboard/client");
+
+        console.log(data.accountType);
+        if (data.accountType === 'client') {
+            router.push("/dashboard/client");
+        } else if (data.accountType === 'associate') {
+            router.push("/dashboard/associate");
+        }
     }
 
     return (
@@ -66,6 +76,18 @@ export default function SignInForm(props: Props) {
                 Sign In Form
             </div>
             <div className="p-2 flex flex-col gap-2">
+                <div className="flex items-center justify-center gap-2">
+                    <h2>Account Type:</h2>
+                    <select
+                        {...register("accountType")}
+                        value={selectedAccountType}
+                        onChange={(e) => setSelectedAccountType(e.target.value)}
+                        className="border border-slate-500 px-2 py-1"
+                    >
+                        <option value="client">Client</option>
+                        <option value="associate">Associate</option>
+                    </select>
+                </div>
                 <Input
                     {...register("email")}
                     label="Email"

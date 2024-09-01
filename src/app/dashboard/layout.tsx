@@ -31,7 +31,7 @@ export default function DashboardLayout({
         checkSession();
 
         // Check every 2 hours
-        const interval = setInterval(checkSession, 0.5 * 60 * 1000);
+        const interval = setInterval(checkSession, 120 * 60 * 1000);
 
         // Clean up the interval on component unmount
         return () => clearInterval(interval);

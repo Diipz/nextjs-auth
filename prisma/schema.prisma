@@ -10,22 +10,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserType {
+enum AccountType {
   CLIENT
   ASSOCIATE
 }
 
 model User {
-  id                 String    @id @default(cuid()) @db.VarChar(255)
-  firstName          String    @db.VarChar(255)
-  lastName           String    @db.VarChar(255)
-  password           String    @db.VarChar(255)
-  email              String    @unique @db.VarChar(255)
-  emailVerified      DateTime? @map("email_verified") @db.DateTime
-  phone              String    @db.VarChar(255)
-  image              String?   @db.VarChar(255)
-  stripe_customer_id String?   @db.VarChar(255)
-  userType           UserType
+  id                 String      @id @default(cuid()) @db.VarChar(255)
+  firstName          String      @db.VarChar(255)
+  lastName           String      @db.VarChar(255)
+  password           String      @db.VarChar(255)
+  email              String      @unique @db.VarChar(255)
+  emailVerified      DateTime?   @map("email_verified") @db.DateTime
+  phone              String      @db.VarChar(255)
+  image              String?     @db.VarChar(255)
+  stripe_customer_id String?     @db.VarChar(255)
+  accountType        AccountType @default(CLIENT)
   accounts           Account[]
   sessions           Session[]
 
