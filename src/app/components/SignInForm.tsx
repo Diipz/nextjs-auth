@@ -101,7 +101,7 @@ export default function SignInForm({ callbackUrl, loginType }: Props) {
                         isLoading={isSubmitting}>
                         {isSubmitting ? "Signing in..." : "Sign In"}
                     </Button>
-                    <Button as={Link} href="/auth/signup/client">Sign Up</Button>
+                    <Button as={Link} href={`/auth/signup/${loginType}`} >Sign Up</Button>
                 </div>
             </div>
         </form>

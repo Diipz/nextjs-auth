@@ -3,6 +3,7 @@ import { verifyJwt } from "@/lib/jwt"
 
 interface Props {
     params: {
+        usertype: string,
         jwt: string
     }
 }
@@ -17,7 +18,7 @@ export default function ResetPasswordPage({ params }: Props) {
 
     return (
         <div className="flex justify-center">
-            <ResetPasswordForm jwtUserId={params.jwt} />
+            <ResetPasswordForm jwtUserId={params.jwt} usertype={params.usertype} />
         </div>
     )
 }

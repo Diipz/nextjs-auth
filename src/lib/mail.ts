@@ -6,7 +6,7 @@ import { resetPasswordTemplate } from "./emailTemplates/resetPassword";
 export async function sendMail({to, subject, body}: {
     to:string, 
     subject:string, 
-    body:string}) {
+    body:string}): Promise<boolean> {
     
         const { SMTP_EMAIL, SMTP_USER, SMTP_PASS } = process.env;
         //**TODO change to development mode on Mailtrap.io
@@ -25,6 +25,7 @@ export async function sendMail({to, subject, body}: {
             console.log("Test Result Of Transport", testResult);
         } catch (error) {
             console.log(error);
+            return false;
         }   
         try {
             const sendResult = await transport.sendMail({
@@ -34,8 +35,10 @@ export async function sendMail({to, subject, body}: {
                 html: body,
             })
             console.log(sendResult);
+            return true;
         } catch (error) {
             console.log(error);
+            return false;
         } 
     }
 

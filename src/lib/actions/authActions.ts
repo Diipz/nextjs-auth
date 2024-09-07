@@ -145,12 +145,23 @@ export const activateUser: ActivateUserFunc = async (jwtUserId, entity) => {
 
 }
 
-export async function forgotPassword(email: string){
-    const user = await prisma.user.findUnique({
-        where: {
-            email: email,
-        }
-    })
+export async function forgotPassword(email: string, usertype: string) {
+
+    let user;
+
+    if(usertype === "client")  {
+        user = await prisma.user.findUnique({
+            where: {
+                email: email,
+            }
+        })
+    } else if(usertype === "associate") {
+        user = await prisma.associate.findUnique({
+            where: {
+                email: email,
+            }
+        })
+    } else throw new Error("Invalid url");
 
     if(!user) throw new Error("The user does not exist!");
 
@@ -159,7 +170,7 @@ export async function forgotPassword(email: string){
         id: user.id 
     });
 
-    const resetPassUrl = `${process.env.NEXTAUTH_URL}/auth/resetPass/${jwtUserId}`;
+    const resetPassUrl = `${process.env.NEXTAUTH_URL}/auth/resetPass/${usertype}/${jwtUserId}`;
     const body = compileResetPassTemplate(user.firstName, resetPassUrl);
 
     const sendResult = await sendMail({
@@ -171,32 +182,58 @@ export async function forgotPassword(email: string){
 }
 
 type ResetPasswordFunc = (
-    jwtUserId: string, 
-    password: string) 
-    => Promise<"userNotExist" | "success">;
+    jwtUserId: string,
+    usertype: string, 
+    password: string
+) 
+    => Promise<"userNotExist" | "success" | "invalidUrl">;
 
-export const resetPassword: ResetPasswordFunc = async(jwtUserId, password) => {
+export const resetPassword: ResetPasswordFunc = async(jwtUserId, usertype, password) => {
         const payload = verifyJwt(jwtUserId);
         if(!payload) return "userNotExist";
         
         const userId = payload?.id;
-        const user = await prisma.user.findUnique({
-            where: {
-                id: userId
-            }
-        })
+        let user, result;
+
+        if (usertype !== "client" && usertype !== "associate") return "invalidUrl";
+
+
+        if(usertype === "client")  {
+            user = await prisma.user.findUnique({
+                where: {
+                    id: userId
+                }
+            })
+        } else if(usertype === "associate") {
+            user = await prisma.associate.findUnique({
+                where: {
+                    id: userId
+                }
+            })
+        }
 
         if(!user) return "userNotExist";
 
-        const result = await prisma.user.update({
-            where: {
-                id: userId
-            },
-            data: {
-                password: await bcrypt.hash(password, 10)
-            }
-        })
-
+        if(usertype === "client")  {
+            result = await prisma.user.update({
+                where: {
+                    id: userId
+                },
+                data: {
+                    password: await bcrypt.hash(password, 10)
+                }
+            })
+        } else if(usertype === "associate") {
+            result = await prisma.associate.update({
+                where: {
+                    id: userId
+                },
+                data: {
+                    password: await bcrypt.hash(password, 10)
+                }
+            })
+        }
+        
         if(result) return "success";
         else throw new Error("Something went wrong!");
     }

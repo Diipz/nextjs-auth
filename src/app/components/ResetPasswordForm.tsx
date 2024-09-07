@@ -13,7 +13,8 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 interface Props {
-    jwtUserId: string
+    jwtUserId: string,
+    usertype: string
 }
 
 const FormSchema = z.object({
@@ -30,7 +31,7 @@ const FormSchema = z.object({
 
 type InputType = z.infer<typeof FormSchema>;
 
-export default function ResetPasswordForm({ jwtUserId }: Props) {
+export default function ResetPasswordForm({ jwtUserId, usertype }: Props) {
 
     const router = useRouter();
 
@@ -49,14 +50,16 @@ export default function ResetPasswordForm({ jwtUserId }: Props) {
 
     useEffect(() => {
         setPassStrength(passwordStrength(watch().password).id)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [watch().password]);
+
 
     const resetPass: SubmitHandler<InputType> = async (data) => {
         try {
-            const result = await resetPassword(jwtUserId, data.password);
+            const result = await resetPassword(jwtUserId, usertype, data.password);
+
             if (result === "success") toast.success("Password Reset Successful");
-            router.push("/");
+            router.push(`/auth/signin/${usertype}`);
+
         } catch (error) {
             toast.error("Something went wrong!");
         }
