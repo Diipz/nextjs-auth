@@ -1,7 +1,7 @@
 
 "use client"
 
-import { BuildingOffice2Icon, EnvelopeIcon, EyeIcon, EyeSlashIcon, KeyIcon, PhoneIcon, UserIcon } from "@heroicons/react/20/solid";
+import { EnvelopeIcon, EyeIcon, EyeSlashIcon, KeyIcon, PhoneIcon, UserIcon } from "@heroicons/react/20/solid";
 import { Button, Checkbox, Input, Link } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { z } from "zod";
@@ -10,17 +10,12 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { passwordStrength } from "check-password-strength";
 import PasswordStrength from "./PasswordStrength";
-import { registerUser } from "@/lib/actions/authActions";
+import { registerAssociate } from "@/lib/actions/authActions";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 
 
 const FormSchema = z.object({
-    organisationType: z.enum(['Practice', 'PCN']),
-    organisationName: z
-        .string()
-        .min(2, "Organisation Name must be atleast 2 characters")
-        .max(25, "Organisation Name must be less than 25 characters"),
     firstName: z
         .string()
         .min(2, "First Name must be atleast 2 characters")
@@ -60,7 +55,7 @@ const FormSchema = z.object({
 
 type InputType = z.infer<typeof FormSchema>
 
-export default function ClientSignUpForm() {
+export default function AssociateSignUpForm() {
 
     const router = useRouter();
 
@@ -76,7 +71,6 @@ export default function ClientSignUpForm() {
         resolver: zodResolver(FormSchema),
     });
 
-    const [selectedOrganisationType, setSelectedOrganisationType] = useState<'Practice' | 'PCN' | undefined>(undefined);
     const [passStrength, setPassStrength] = useState(0);
     const [isVisiblePass, setIsVisiblePass] = useState(false);
     const toggleVisiblePass = () => setIsVisiblePass((prev) => !prev);
@@ -87,22 +81,16 @@ export default function ClientSignUpForm() {
     }, [watch().password]);
 
 
-    useEffect(() => {
-        if (selectedOrganisationType !== undefined) {
-            setValue('organisationType', selectedOrganisationType);
-        }
-    }, [selectedOrganisationType]);
-
     // Obtain SubmitHandler from React-hook-form
     const saveUser: SubmitHandler<InputType> = async (data) => {
 
-        const { accepted, confirmPassword, ...user } = data;
+        const { accepted, confirmPassword, ...associate } = data;
 
 
         try {
-            const result = await registerUser(user);
+            const result = await registerAssociate(associate);
             toast.success("An activation link has been sent to your email");
-            router.push("/auth/signin/client");
+            router.push("/auth/signin/associate");
 
         } catch (error) {
             toast.error("Something Went Wrong");
@@ -112,30 +100,6 @@ export default function ClientSignUpForm() {
 
     return (
         <form onSubmit={handleSubmit(saveUser)} className="grid grid-cols-2 gap-3 p-2 place-self-stretch shadow border rounded-md">
-
-            <div className="flex items-center justify-evenly col-span-2">
-                <h2>Organisation Category</h2>
-                <select
-                    value={selectedOrganisationType}
-                    onChange={(e) => setSelectedOrganisationType(e.target.value as "Practice" | "PCN" | undefined)}
-                    name="organisationType"
-                    className="border border-slate-500 px-2 py-1"
-                >
-                    <option defaultValue={undefined} value={undefined}>Please Select</option>
-                    <option value="Practice">Practice</option>
-                    <option value="PCN">PCN</option>
-                </select>
-            </div>
-            {!!errors.organisationType && <p className="text-red-500 text-center col-span-2">{errors.organisationType?.message}</p>}
-            <Input
-                {...register("organisationName")}
-                label="Organisation Name"
-                errorMessage={errors.organisationName?.message}
-                isInvalid={!!errors.organisationName}
-                className="col-span-2"
-                startContent={<BuildingOffice2Icon className="w-4" />}
-            />
-
             <Input
                 {...register("firstName")}
                 id="firstName"

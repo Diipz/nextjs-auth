@@ -3,7 +3,6 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/20/solid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Input } from "@nextui-org/react";
-import { AccountType } from "@prisma/client";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,26 +13,26 @@ import { z } from "zod";
 
 interface Props {
     callbackUrl?: string;
+    loginType: string;
 }
+
 
 const FormSchema = z.object({
     email: z.string().email("Please enter a valid NHS email address"),
     password: z.string({
         required_error: "Please enter your password"
     }),
-    accountType: z.enum(['client', 'associate'])
 })
 
 //define new Typescript type using "type"
 //"z.infer" is a utility provided by zod that infers the TypeScript type from the given zod schema. "typeof FormSchema" is used to refer to the type of the FormSchema object
 type InputType = z.infer<typeof FormSchema>
 
-export default function SignInForm(props: Props) {
+export default function SignInForm({ callbackUrl, loginType }: Props) {
 
     const router = useRouter();
 
     const [visiblePass, setVisiblePass] = useState(false);
-    const [selectedAccountType, setSelectedAccountType] = useState('');
 
     const {
         register,
@@ -47,26 +46,19 @@ export default function SignInForm(props: Props) {
     //SubmitHandler from react-hook-form
     const onSubmit: SubmitHandler<InputType> = async (data) => {
         //when calling "signIn" function from next/auth, we are actually calling the "authorize" function from "CredentialsProvider" on /api/auth/route.ts
-        const result = await signIn("credentials", {
+        const result = await signIn(loginType, {
             //stop page refresh
             redirect: false,
             username: data.email,
-            password: data.password,
-            accountType: data.accountType
+            password: data.password
         })
+
         if (!result?.ok) {
             toast.error(result?.error);
             return;
         }
-
         toast.success("Sign in successful");
-
-        console.log(data.accountType);
-        if (data.accountType === 'client') {
-            router.push("/dashboard/client");
-        } else if (data.accountType === 'associate') {
-            router.push("/dashboard/associate");
-        }
+        router.push(`/dashboard/${loginType}`);
     }
 
     return (
@@ -76,18 +68,6 @@ export default function SignInForm(props: Props) {
                 Sign In Form
             </div>
             <div className="p-2 flex flex-col gap-2">
-                <div className="flex items-center justify-center gap-2">
-                    <h2>Account Type:</h2>
-                    <select
-                        {...register("accountType")}
-                        value={selectedAccountType}
-                        onChange={(e) => setSelectedAccountType(e.target.value)}
-                        className="border border-slate-500 px-2 py-1"
-                    >
-                        <option value="client">Client</option>
-                        <option value="associate">Associate</option>
-                    </select>
-                </div>
                 <Input
                     {...register("email")}
                     label="Email"
@@ -98,6 +78,7 @@ export default function SignInForm(props: Props) {
                 <Input
                     {...register("password")}
                     label="Password"
+                    autoComplete="on"
                     type={visiblePass ? "text" : "password"}
                     errorMessage={errors.password?.message}
                     endContent={
@@ -120,7 +101,7 @@ export default function SignInForm(props: Props) {
                         isLoading={isSubmitting}>
                         {isSubmitting ? "Signing in..." : "Sign In"}
                     </Button>
-                    <Button as={Link} href="/auth/signup">Sign Up</Button>
+                    <Button as={Link} href="/auth/signup/client">Sign Up</Button>
                 </div>
             </div>
         </form>

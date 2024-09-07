@@ -10,31 +10,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum AccountType {
-  CLIENT
-  ASSOCIATE
+enum OrganisationType {
+  Practice
+  PCN
 }
 
 model User {
-  id                 String      @id @default(cuid()) @db.VarChar(255)
-  firstName          String      @db.VarChar(255)
-  lastName           String      @db.VarChar(255)
-  password           String      @db.VarChar(255)
-  email              String      @unique @db.VarChar(255)
-  emailVerified      DateTime?   @map("email_verified") @db.DateTime
-  phone              String      @db.VarChar(255)
-  image              String?     @db.VarChar(255)
-  stripe_customer_id String?     @db.VarChar(255)
-  accountType        AccountType @default(CLIENT)
+  id                 String           @id @default(cuid()) @db.VarChar(255)
+  organisationName   String           @db.VarChar(255)
+  firstName          String           @db.VarChar(255)
+  lastName           String           @db.VarChar(255)
+  password           String           @db.VarChar(255)
+  email              String           @unique @db.VarChar(255)
+  emailVerified      DateTime?        @map("email_verified") @db.DateTime
+  phone              String           @db.VarChar(255)
+  image              String?          @db.VarChar(255)
+  stripe_customer_id String?          @db.VarChar(255)
+  organisationType   OrganisationType @default(Practice)
   accounts           Account[]
   sessions           Session[]
 
   @@map("users")
 }
 
+model Associate {
+  id                 String    @id @default(cuid()) @db.VarChar(255)
+  firstName          String    @db.VarChar(255)
+  lastName           String    @db.VarChar(255)
+  password           String    @db.VarChar(255)
+  email              String    @unique @db.VarChar(255)
+  emailVerified      DateTime? @map("email_verified") @db.DateTime
+  phone              String    @db.VarChar(255)
+  image              String?   @db.VarChar(255)
+  stripe_customer_id String?   @db.VarChar(255)
+  accounts           Account[]
+  sessions           Session[]
+
+  @@map("associates")
+}
+
 model Account {
   id                String  @id @default(cuid()) @db.VarChar(255)
-  userId            String  @map("user_id") @db.VarChar(255)
+  userId            String? @map("user_id") @db.VarChar(255)
+  associateId       String? @db.VarChar(255)
   type              String  @db.VarChar(255)
   provider          String  @db.VarChar(255)
   providerAccountId String  @map("provider_account_id") @db.VarChar(255)
@@ -46,18 +64,21 @@ model Account {
   id_token          String? @db.Text
   session_state     String? @db.VarChar(255)
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Associate Associate? @relation(fields: [associateId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
 
 model Session {
-  id           String   @id @default(cuid()) @db.VarChar(255)
-  sessionToken String   @unique @map("session_token") @db.VarChar(255)
-  userId       String   @map("user_id") @db.VarChar(255)
-  expires      DateTime @db.DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String     @id @default(cuid()) @db.VarChar(255)
+  sessionToken String     @unique @map("session_token") @db.VarChar(255)
+  userId       String     @map("user_id") @db.VarChar(255)
+  expires      DateTime   @db.DateTime
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Associate    Associate? @relation(fields: [associateId], references: [id], onDelete: Cascade)
+  associateId  String?    @db.VarChar(255)
 
   @@map("sessions")
 }

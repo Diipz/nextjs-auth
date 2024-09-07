@@ -3,12 +3,14 @@ import { AuthOptions } from "next-auth";
 import  CredentialsProvider  from "next-auth/providers/credentials";
 import * as bcrypt from "bcrypt";
 import NextAuth from "next-auth/next";
-import { User } from "@prisma/client";
+import { User, Associate } from "@prisma/client";
+
+
 
 export const authOptions : AuthOptions = {
 
     pages: {
-        signIn: "/auth/signin"
+        signIn: "/auth/signin/client"
     },
 
     // Session expires in 2 hours
@@ -19,7 +21,8 @@ export const authOptions : AuthOptions = {
 
     providers :[   
         CredentialsProvider({
-            name: "Credentials",
+            id: "client",
+            name: "Client Credentials",
 
             credentials: {
                 username: {
@@ -30,24 +33,18 @@ export const authOptions : AuthOptions = {
                 password: {
                     label: "Password",
                     type: "password"
-                },
-                accountType: {
-                    label: "Account Type",
-                    type: "select",
-                    options: [
-                      { value: "client", label: "Client" },
-                      { value: "associate", label: "Associate" }
-                    ]
-                  }
+                }
             },
             //Once user clicks sign in, the username and password are passed as credentials
             async authorize(credentials) {
                 //return user object if user credentials correct otherwise return null & throw error
+                
+                // Try to find the user in the `User` table first
                 const user = await prisma.user.findUnique({
                     where: {
-                        email: credentials?.username
+                        email: credentials?.username,
                     }
-                })
+                });
 
                 if(!user) throw new Error("User name or password is not correct");
 
@@ -57,32 +54,66 @@ export const authOptions : AuthOptions = {
                 if(!isPasswordCorrect) throw new Error("User name or password is not correct");
 
                 if(!user.emailVerified) throw new Error("Please verify your email");
-
-                const userAccountTypeLower = user.accountType.toLowerCase();
-                console.log(userAccountTypeLower);
-                console.log(credentials?.accountType);
-                if (credentials?.accountType !== userAccountTypeLower) {
-                    throw new Error("Account type mismatch");
-                }
                 
                 //successful login
                 const { password, ...userWithoutPass } = user;
                 //userWithoutPass sent to NextAuth session
                 return userWithoutPass;
             }
-        })    
+        }),
+
+        CredentialsProvider({
+            id: "associate",
+            name: "Associate Credentials",
+
+            credentials: {
+                username: {
+                    label: "User Name",
+                    type: "text",
+                    placeholder: "User Name"    
+                },
+                password: {
+                    label: "Password",
+                    type: "password"
+                }
+            },
+            //Once user clicks sign in, the username and password are passed as credentials
+            async authorize(credentials) {
+                //return user object if user credentials correct otherwise return null & throw error
+                
+                // Try to find the user in the `User` table first
+                const user = await prisma.associate.findUnique({
+                    where: {
+                        email: credentials?.username,
+                    }
+                });
+
+                if(!user) throw new Error("User name or password is not correct");
+
+                if(!credentials?.password) throw new Error("Please Provide Your Password");
+                const isPasswordCorrect = await bcrypt.compare(credentials.password, user.password)
+
+                if(!isPasswordCorrect) throw new Error("User name or password is not correct");
+
+                if(!user.emailVerified) throw new Error("Please verify your email");
+                
+                //successful login
+                const { password, ...userWithoutPass } = user;
+                //userWithoutPass sent to NextAuth session
+                return userWithoutPass;
+            }
+        }),
     ],
 
-    //add "user" from prisma schema to JWT token in order to access user credentials in session
-    //first & last name displayed on Navbar once signed in
     callbacks: {
+        // Add "User" from prisma schema to JWT token in order to access user credentials in session
         async jwt({ token, user }) {
-            if(user) token.user = user as User
+            if(user) token.user = user as any
             return token;
         },
         
         async session({ token, session }) {
-            session.user = token.user;
+            session.user = token.user as any
             return session;
         }
     }

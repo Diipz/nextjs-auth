@@ -1,6 +1,6 @@
 "use server"
 
-import { User } from "@prisma/client";
+import { User, Associate } from "@prisma/client";
 import prisma from "../prisma";
 import * as bcrypt from "bcrypt";
 import { compileActivationTemplate, compileResetPassTemplate, sendMail } from "../mail";
@@ -8,7 +8,7 @@ import { signJwt, signJwtResetPass, verifyJwt } from "../jwt";
 import { setTimeout } from 'timers';
 
 export async function registerUser(
-    user: Omit<User, "id" | "emailVerified" | "image" | "stripe_customer_id">
+    user: Omit<User, "id" | "emailVerified" | "image" | "stripe_customer_id">,
 ) {
 
     const result = await prisma.user.create({
@@ -19,7 +19,8 @@ export async function registerUser(
     })
 
     const jwtUserId = signJwt({ id: result.id });
-    const activationUrl = `${process.env.NEXTAUTH_URL}/auth/activation/${jwtUserId}`;
+    const entity = "client";
+    const activationUrl = `${process.env.NEXTAUTH_URL}/auth/activation/${entity}/${jwtUserId}`;
     const body = compileActivationTemplate(user.firstName, activationUrl);
     
     await sendMail({
@@ -48,33 +49,100 @@ export async function registerUser(
     return result;
 }
 
-type ActivateUserFunc = (jswtUserId: string) => Promise<"userNotExist" | "alreadyActivated" | "success" | "linkExpired" >;
+export async function registerAssociate(
+    associate: Omit<Associate, "id" | "emailVerified" | "image" | "stripe_customer_id">
+) {
 
-export const activateUser: ActivateUserFunc = async (jwtUserId) => {
+    const result = await prisma.associate.create({
+        data: {
+            ...associate,
+            password: await bcrypt.hash(associate.password, 10)
+        }
+    })
+
+    const jwtUserId = signJwt({ id: result.id });
+    const entity = "associate";
+    const activationUrl = `${process.env.NEXTAUTH_URL}/auth/activation/${entity}/${jwtUserId}`;
+    const body = compileActivationTemplate(associate.firstName, activationUrl);
+    
+    await sendMail({
+        to: associate.email,
+        subject: "Activate your account",
+        body
+    });
+    
+    //delete user after 10 minutes if not activated
+    setTimeout(async () => {
+        const associateCheck = await prisma.associate.findUnique({
+        where: {
+                id: result.id
+            }
+        });
+        if (!associateCheck?.emailVerified) {
+            await prisma.associate.delete({
+                where: {
+                    id: result.id
+                }
+            });
+        }
+    }, 10 * 60 * 1000);
+
+
+    return result;
+}
+
+
+type ActivateUserFunc = (jwtUserId: string, entity: string) => Promise<"userNotExist" | "alreadyActivated" | "success" | "linkExpired" >;
+
+export const activateUser: ActivateUserFunc = async (jwtUserId, entity) => {
     const payload = verifyJwt(jwtUserId);
 
     //expired activation link
     if(!payload) return "linkExpired";
 
-    const userId = payload?.id;
-    const user = await prisma.user.findUnique({
-        where: {
-            id: userId
-        }
-    })
+    if(entity === "client"){
+        
+        const userId = payload?.id;
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId
+            }
+        })
+    
+        if(!user) return "userNotExist";
+        if(user.emailVerified) return "alreadyActivated";
+    
+        const result = await prisma.user.update({
+            where: {
+                id: userId
+            },
+            data: {
+                emailVerified: new Date()
+            }
+        })
+        return "success";
+    } else {
+        const associateId = payload?.id;
+        const associate = await prisma.associate.findUnique({
+            where: {
+                id: associateId
+            }
+        })
+    
+        if(!associate) return "userNotExist";
+        if(associate.emailVerified) return "alreadyActivated";
+    
+        const result = await prisma.associate.update({
+            where: {
+                id: associateId
+            },
+            data: {
+                emailVerified: new Date()
+            }
+        })
+        return "success";
+    }
 
-    if(!user) return "userNotExist";
-    if(user.emailVerified) return "alreadyActivated";
-
-    const result = await prisma.user.update({
-        where: {
-            id: userId
-        },
-        data: {
-            emailVerified: new Date()
-        }
-    })
-    return "success";
 }
 
 export async function forgotPassword(email: string){
