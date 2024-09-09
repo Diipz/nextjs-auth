@@ -13,6 +13,7 @@ import PasswordStrength from "./PasswordStrength";
 import { registerUser } from "@/lib/actions/authActions";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { UserType } from "@prisma/client";
 
 
 const FormSchema = z.object({
@@ -98,9 +99,14 @@ export default function ClientSignUpForm() {
 
         const { accepted, confirmPassword, ...user } = data;
 
+        const userWithUserType = {
+            ...user,
+            userType: UserType.client,
+        };
+
 
         try {
-            const result = await registerUser(user);
+            const result = await registerUser(userWithUserType);
             toast.success("An activation link has been sent to your email");
             router.push("/auth/signin/client");
 

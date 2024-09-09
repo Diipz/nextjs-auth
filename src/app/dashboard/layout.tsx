@@ -23,7 +23,7 @@ export default function DashboardLayout({
     useEffect(() => {
         const checkSession = () => {
             if (!loading && !session) {
-                router.push('/api/auth/signin'); // Redirect to sign-in page
+                router.push('/');
             }
         };
 

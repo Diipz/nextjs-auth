@@ -15,6 +15,16 @@ enum OrganisationType {
   PCN
 }
 
+enum UserType {
+  client
+  associate
+}
+
+enum AccountActivated {
+  no
+  yes
+}
+
 model User {
   id                 String           @id @default(cuid()) @db.VarChar(255)
   organisationName   String           @db.VarChar(255)
@@ -27,6 +37,7 @@ model User {
   image              String?          @db.VarChar(255)
   stripe_customer_id String?          @db.VarChar(255)
   organisationType   OrganisationType @default(Practice)
+  userType           UserType         @default(client)
   accounts           Account[]
   sessions           Session[]
 
@@ -34,15 +45,17 @@ model User {
 }
 
 model Associate {
-  id                 String    @id @default(cuid()) @db.VarChar(255)
-  firstName          String    @db.VarChar(255)
-  lastName           String    @db.VarChar(255)
-  password           String    @db.VarChar(255)
-  email              String    @unique @db.VarChar(255)
-  emailVerified      DateTime? @map("email_verified") @db.DateTime
-  phone              String    @db.VarChar(255)
-  image              String?   @db.VarChar(255)
-  stripe_customer_id String?   @db.VarChar(255)
+  id                 String           @id @default(cuid()) @db.VarChar(255)
+  firstName          String           @db.VarChar(255)
+  lastName           String           @db.VarChar(255)
+  password           String           @db.VarChar(255)
+  email              String           @unique @db.VarChar(255)
+  emailVerified      DateTime?        @map("email_verified") @db.DateTime
+  phone              String           @db.VarChar(255)
+  image              String?          @db.VarChar(255)
+  stripe_customer_id String?          @db.VarChar(255)
+  userType           UserType         @default(associate)
+  accountActivated   AccountActivated @default(no)
   accounts           Account[]
   sessions           Session[]
 

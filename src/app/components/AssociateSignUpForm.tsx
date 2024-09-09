@@ -13,6 +13,7 @@ import PasswordStrength from "./PasswordStrength";
 import { registerAssociate } from "@/lib/actions/authActions";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { UserType, AccountActivated } from "@prisma/client";
 
 
 const FormSchema = z.object({
@@ -86,9 +87,14 @@ export default function AssociateSignUpForm() {
 
         const { accepted, confirmPassword, ...associate } = data;
 
+        const associateWithFullCredentials = {
+            ...associate,
+            userType: UserType.associate,
+            accountActivated: AccountActivated.no,
+        }
 
         try {
-            const result = await registerAssociate(associate);
+            const result = await registerAssociate(associateWithFullCredentials);
             toast.success("An activation link has been sent to your email");
             router.push("/auth/signin/associate");
 
