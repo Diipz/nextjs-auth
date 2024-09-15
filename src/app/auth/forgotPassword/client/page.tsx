@@ -18,13 +18,9 @@ const FormSchema = z.object({
 
 type InputType = z.infer<typeof FormSchema>;
 
-interface Props {
-    params: {
-        usertype: string
-    }
-}
 
-export default function ForgotPasswordPage({ params }: Props) {
+
+export default function ForgotPasswordPage() {
 
     const {
         register,
@@ -36,8 +32,10 @@ export default function ForgotPasswordPage({ params }: Props) {
     })
 
     const submitRequest: SubmitHandler<InputType> = async (data) => {
+        const usertype = "client";
+
         try {
-            const result = await forgotPassword(data.email, params.usertype);
+            const result = await forgotPassword(data.email, usertype);
             toast.success("A reset password link was sent to your email");
             reset();
         } catch (error) {
