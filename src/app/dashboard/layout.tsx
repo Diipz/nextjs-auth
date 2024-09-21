@@ -1,47 +1,32 @@
-"use client"
-
 import Link from "next/link";
 import LogoIcon from "@@/assets/logo.svg";
 import DashboardMenu from "../components/DashboardMenu";
 import DashboardNavbar from "../components/DashboardNavbar";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { UserType } from "@prisma/client";
+import { redirect } from "next/navigation";
 
-
-export default function DashboardLayout({
+// Server Component
+export default async function DashboardLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    // Fetch the session server-side
+    const session = await getServerSession(authOptions);
 
-    const { data: session, status } = useSession();
-    const loading = status === "loading";
-    const router = useRouter();
+    // Check for session and redirect if needed
+    if (!session || !session.user) {
+        redirect("/");
+    }
 
-    // Feature to redirect user to sign-in page if session expires
-    useEffect(() => {
-        const checkSession = () => {
-            if (!loading && !session) {
-                router.push('/');
-            }
-        };
-
-        // Initial check
-        checkSession();
-
-        // Check every 2 hours
-        const interval = setInterval(checkSession, 120 * 60 * 1000);
-
-        // Clean up the interval on component unmount
-        return () => clearInterval(interval);
-    }, [loading, session, router]);
-
+    const user = session.user;
 
     // Destructure custom fields from User object
-    const userType = session?.user?.userType as UserType;
-
+    const userType = session.user.userType as UserType;
+    const firstName = session.user.firstName ?? '';
+    const lastName = session.user.lastName ?? '';
 
     return (
         <div className="h-screen flex">
@@ -53,9 +38,9 @@ export default function DashboardLayout({
                 <DashboardMenu userType={userType} />
             </div>
             <div className="w-5/6 overflow-scroll">
-                <DashboardNavbar />
+                <DashboardNavbar userType={userType} firstName={firstName} lastName={lastName} />
                 {children}
             </div>
         </div>
-    )
+    );
 }

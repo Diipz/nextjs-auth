@@ -1,10 +1,10 @@
 "use client"
 
 import Link from "next/link";
-import { HomeIcon, CalendarIcon, EnvelopeIcon, ClipboardDocumentListIcon, CreditCardIcon, ArrowRightStartOnRectangleIcon, BuildingOffice2Icon, UserIcon } from "@heroicons/react/24/outline";
+import { HomeIcon, CalendarIcon, ClipboardDocumentListIcon, MegaphoneIcon, CreditCardIcon, ArrowRightStartOnRectangleIcon, BuildingOffice2Icon, UserIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import { signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { UserType } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 
 export default function DashboardMenu({ userType }: { userType: UserType }) {
@@ -28,10 +28,10 @@ export default function DashboardMenu({ userType }: { userType: UserType }) {
                     visible: ["client", "associate"],
                 },
                 {
-                    icon: <EnvelopeIcon className="h-6 w-6" />,
-                    label: "Messages",
-                    href: `/dashboard/${userType}/messages`,
-                    visible: ["client", "associate"],
+                    icon: <MegaphoneIcon className="h-6 w-6" />,
+                    label: "Job Posts",
+                    href: `/dashboard/client/jobposts`,
+                    visible: ["client"],
                 },
                 {
                     icon: <ClipboardDocumentListIcon className="h-6 w-6" />,
@@ -63,6 +63,12 @@ export default function DashboardMenu({ userType }: { userType: UserType }) {
                     visible: ["client"],
                 },
                 {
+                    icon: <InformationCircleIcon className="h-6 w-6" />,
+                    label: "Guide",
+                    href: `/dashboard/${userType}/guide`,
+                    visible: ["client", "associate"],
+                },
+                {
                     icon: <ArrowRightStartOnRectangleIcon className="h-6 w-6" />,
                     label: "Logout",
                     href: "/",
@@ -75,8 +81,7 @@ export default function DashboardMenu({ userType }: { userType: UserType }) {
 
     const handleSignOut = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        await signOut({ redirect: false });
-        router.push("/auth/signin");
+        await signOut({ callbackUrl: `/auth/signin/${userType}` });
     }
 
     return (

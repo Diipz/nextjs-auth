@@ -3,7 +3,6 @@ import { AuthOptions } from "next-auth";
 import  CredentialsProvider  from "next-auth/providers/credentials";
 import * as bcrypt from "bcrypt";
 import NextAuth from "next-auth/next";
-import { User, Associate } from "@prisma/client";
 
 
 
@@ -13,10 +12,10 @@ export const authOptions : AuthOptions = {
         signIn: "/auth/signin/client"
     },
 
-    // Session expires in 2 hours
+    // Session expires in x hours
     session: {
         strategy: "jwt",
-        maxAge: 120 * 60
+        maxAge: 5 * 60
     },
 
     providers :[   

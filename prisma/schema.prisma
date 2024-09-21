@@ -40,8 +40,21 @@ model User {
   userType           UserType         @default(client)
   accounts           Account[]
   sessions           Session[]
+  posts              Post[]
 
   @@map("users")
+}
+
+model Post {
+  id           String         @id @default(cuid()) @db.VarChar(255)
+  title        String         @db.VarChar(255)
+  content      String         @db.Text
+  createdAt    DateTime       @default(now())
+  userId       String         @db.VarChar(255)
+  user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Notification Notification[]
+
+  @@map("posts")
 }
 
 model Associate {
@@ -54,12 +67,27 @@ model Associate {
   phone              String           @db.VarChar(255)
   image              String?          @db.VarChar(255)
   stripe_customer_id String?          @db.VarChar(255)
+  notifications      Notification[]
   userType           UserType         @default(associate)
   accountActivated   AccountActivated @default(no)
   accounts           Account[]
   sessions           Session[]
 
   @@map("associates")
+}
+
+model Notification {
+  id          String    @id @default(cuid()) @db.VarChar(255)
+  title       String    @db.VarChar(255)
+  message     String    @db.Text
+  read        Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  postId      String    @db.VarChar(255)
+  post        Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  associateId String    @db.VarChar(255)
+  associate   Associate @relation(fields: [associateId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
 }
 
 model Account {

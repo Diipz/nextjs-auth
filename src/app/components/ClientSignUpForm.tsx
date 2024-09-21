@@ -17,7 +17,9 @@ import { UserType } from "@prisma/client";
 
 
 const FormSchema = z.object({
-    organisationType: z.enum(['Practice', 'PCN']),
+    organisationType: z.enum(['Practice', 'PCN'], {
+        errorMap: () => ({ message: "Please select an organisation type" }),
+    }),
     organisationName: z
         .string()
         .min(2, "Organisation Name must be atleast 2 characters")
