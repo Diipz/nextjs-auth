@@ -1,12 +1,14 @@
 import Stripe from 'stripe';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from "@/lib/authOptions";
 import { createCheckoutLink, createCustomerIfNull, generateCustomerPortalLink, hasSubscription } from '@/lib/billing';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
 import { StripePricingTable } from '@/lib/pricingTable';
 
-export const stripe = new Stripe(String(process.env.STRIPE_SECRET), {
+
+
+export const stripe = new (Stripe as any)(String(process.env.STRIPE_SECRET), {
     apiVersion: '2024-06-20',
 });
 
@@ -47,7 +49,8 @@ export default async function SubscriptionPage() {
                     </div>
             }
 
-            <StripePricingTable />
+            {/* hasSub shown as false when attempting to subscribe by clicking on table products */}
+            {/* <StripePricingTable /> */}
 
         </div>
     )

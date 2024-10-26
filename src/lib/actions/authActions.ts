@@ -10,6 +10,13 @@ import { setTimeout } from 'timers';
 export async function registerUser(
     user: Omit<User, "id" | "emailVerified" | "image" | "stripe_customer_id">,
 ) {
+    const existingUser = await prisma.user.findUnique({
+        where: { email: user.email },
+      });
+    
+      if (existingUser) {
+        throw new Error("User already exists");
+      }
 
     const result = await prisma.user.create({
         data: {

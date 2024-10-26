@@ -3,7 +3,7 @@ import LogoIcon from "@@/assets/logo.svg";
 import DashboardMenu from "../components/DashboardMenu";
 import DashboardNavbar from "../components/DashboardNavbar";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import { UserType } from "@prisma/client";
 import { redirect } from "next/navigation";
 

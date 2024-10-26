@@ -2,10 +2,10 @@ import { BellAlertIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { UserType } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+
 
 
 

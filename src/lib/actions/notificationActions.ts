@@ -3,19 +3,6 @@
 import { revalidatePath } from "next/cache";
 import prisma from "../prisma";
 
-export async function fetchNotifications(userId: string) {
-    try {
-        // Fetch notifications from your database
-        const notifications = await prisma.notification.findMany({
-            where: { associateId: userId },
-            orderBy: { createdAt: 'desc' },
-        });
-        return notifications;
-    } catch (error) {
-        console.error("Unable to fetch notifications:", error);
-        throw new Error("Could not fetch notification"); // Re-throw the error for handling in the UI
-    }
-}
 
 export async function markNotificationAsRead(notificationId: string) {
     try {

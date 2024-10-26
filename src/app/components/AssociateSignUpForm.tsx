@@ -1,4 +1,3 @@
-
 "use client"
 
 import { EnvelopeIcon, EyeIcon, EyeSlashIcon, KeyIcon, PhoneIcon, UserIcon } from "@heroicons/react/20/solid";
@@ -79,7 +78,7 @@ export default function AssociateSignUpForm() {
     //password strength feature
     useEffect(() => {
         setPassStrength(passwordStrength(watch().password as string).id)
-    }, [watch().password]);
+    }, [watch]);
 
 
     // Obtain SubmitHandler from React-hook-form

@@ -1,12 +1,12 @@
 "use server"
 
+import prisma from "@/lib/prisma";
 import { markNotificationAsRead, deleteNotification } from "@/lib/actions/notificationActions";
+import { applyToPostion } from "@/lib/actions/jobPostActions";
 import NotificationItem from "@/app/components/NotificationItem";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import { redirect } from "next/navigation";
-import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
 
 export default async function NotificationsPage() {
     const session = await getServerSession(authOptions);
@@ -24,8 +24,6 @@ export default async function NotificationsPage() {
         },
     });
 
-
-
     return (
         <div className="flex flex-col justify-center items-center m-4">
             <h1 className="text-2xl font-bold">List of Notifications</h1>
@@ -35,11 +33,16 @@ export default async function NotificationsPage() {
                         <NotificationItem
                             key={notification.id}
                             notificationId={notification.id}
+                            postId={notification.postId}
+                            associateId={notification.associateId}
                             title={notification.title}
+                            positionType={notification.positionType}
                             message={notification.message}
                             createdAt={notification.createdAt}
+                            deadline={notification.deadline}
                             isRead={notification.read}
                             markNotificationAsRead={markNotificationAsRead}
+                            applyToPostion={applyToPostion}
                             deleteNotification={deleteNotification}
                         />
                     ))

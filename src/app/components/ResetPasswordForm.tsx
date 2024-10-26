@@ -41,7 +41,6 @@ export default function ResetPasswordForm({ jwtUserId, usertype }: Props) {
     const {
         register,
         handleSubmit,
-        reset,
         watch,
         formState: { errors, isSubmitting }
     } = useForm<InputType>({
@@ -50,7 +49,7 @@ export default function ResetPasswordForm({ jwtUserId, usertype }: Props) {
 
     useEffect(() => {
         setPassStrength(passwordStrength(watch().password).id)
-    }, [watch().password]);
+    }, [watch]);
 
 
     const resetPass: SubmitHandler<InputType> = async (data) => {

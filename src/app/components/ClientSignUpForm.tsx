@@ -114,7 +114,7 @@ export default function ClientSignUpForm() {
 
         } catch (error) {
             toast.error("Something Went Wrong");
-            console.error(error);
+            console.log(error);
         }
     }
 

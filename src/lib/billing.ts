@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "../app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import Stripe from "stripe";
 import prisma from "@/lib/prisma";
 
@@ -25,9 +25,11 @@ export async function hasSubscription() {
 }
 
 export async function createCheckoutLink(customer: string) {
+
+
     const checkout = await stripe.checkout.sessions.create({
-        success_url: `${process.env.NEXTAUTH_URL}/dashboard`,
-        cancel_url: `${process.env.NEXTAUTH_URL}/dashboard`,
+        success_url: `${process.env.NEXTAUTH_URL}/dashboard/client`,
+        cancel_url: `${process.env.NEXTAUTH_URL}/dashboard/client`,
         customer: customer,
         line_items: [
             {
@@ -42,14 +44,13 @@ export async function createCheckoutLink(customer: string) {
 }
 
 export async function generateCustomerPortalLink(customerId: string) {
+
+
     try {
-        
         const portalSession = await stripe.billingPortal.sessions.create({
             customer: customerId,
-            return_url: process.env.NEXTAUTH_URL + "/dashboard", 
+            return_url: process.env.NEXTAUTH_URL + "/dashboard/client", 
         });
-
-        console.log(portalSession.return_url);
 
         return portalSession.url;
     } catch (error) {

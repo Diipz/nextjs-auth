@@ -23,7 +23,7 @@ export default function Feature({ title, description }: { title: string, descrip
         return () => {
             window.removeEventListener("mousemove", updateMousePosition);
         }
-    }, []);
+    }, [offsetX, offsetY]);
 
     return (
         <div className="border border-white/30 px-5 md:py-10 py-6 text-center rounded-xl sm:flex-1 relative">

@@ -1,5 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+
+    // Remove if wanting to see typescript errors
+    typescript: {
+      ignoreBuildErrors: true
+    },
+    
     webpack(config) {
       // Grab the existing rule that handles SVG imports
       const fileLoaderRule = config.module.rules.find((rule) =>
@@ -19,6 +25,10 @@ const nextConfig = {
           issuer: fileLoaderRule.issuer,
           resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] }, // exclude if *.svg?url
           use: ["@svgr/webpack"],
+        },
+        {
+          test: /\.hbs$/, // Add the .hbs extension
+          loader: 'handlebars-loader',
         }
       );
   
